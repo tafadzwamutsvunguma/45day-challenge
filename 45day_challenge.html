@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>45-Day Better Version of Me</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #161616;
+    --bg3: #1e1e1e;
+    --bg4: #252525;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8e4;
+    --text2: #9a9a94;
+    --text3: #5a5a56;
+    --accent: #c8b97a;
+    --accent2: #a89a5a;
+    --green: #5a9a6a;
+    --green-bg: rgba(90,154,106,0.12);
+    --blue: #5a7aaa;
+    --blue-bg: rgba(90,122,170,0.12);
+    --purple: #7a6aaa;
+    --purple-bg: rgba(122,106,170,0.12);
+    --coral: #aa6a5a;
+    --coral-bg: rgba(170,106,90,0.12);
+    --teal: #5a9a8a;
+    --teal-bg: rgba(90,154,138,0.12);
+    --gold: #c8b97a;
+    --gold-bg: rgba(200,185,122,0.12);
+    --red: #aa5a5a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 240px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 2rem;
+  }
+  .sidebar-header {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+  }
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+    font-family: sans-serif;
+  }
+  .sidebar-section {
+    padding: 0.5rem 0.75rem 0.25rem 1.25rem;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    font-family: sans-serif;
+  }
+  .sidebar-week {
+    margin: 0.5rem 0.75rem;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .week-header {
+    padding: 0.4rem 0.75rem;
+    font-size: 11px;
+    font-family: sans-serif;
+    color: var(--text2);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .week-header:hover { background: var(--bg3); }
+  .week-days { display: none; }
+  .week-days.open { display: block; }
+  .day-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.28rem 0.75rem 0.28rem 1.5rem;
+    font-size: 12px;
+    font-family: sans-serif;
+    color: var(--text2);
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    border-radius: 4px;
+    transition: background 0.12s, color 0.12s;
+  }
+  .day-btn:hover { background: var(--bg3); color: var(--text); }
+  .day-btn.active { background: var(--gold-bg); color: var(--gold); }
+  .day-btn .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+  }
+  .day-btn.done .dot { background: var(--green); }
+  .main {
+    margin-left: 240px;
+    min-height: 100vh;
+  }
+  .top-bar {
+    padding: 1.5rem 2.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .top-title {
+    font-size: 15px;
+    color: var(--text);
+    font-family: 'Georgia', serif;
+  }
+  .top-title span {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    max-width: 300px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: sans-serif;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--bg4);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .content {
+    padding: 2rem 2.5rem 4rem;
+    max-width: 860px;
+  }
+  .day-page { display: none; }
+  .day-page.active { display: block; }
+  .day-hero {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .day-number {
+    font-size: 52px;
+    color: var(--accent);
+    font-family: 'Georgia', serif;
+    line-height: 1;
+    font-style: italic;
+  }
+  .day-label {
+    font-size: 13px;
+    color: var(--text3);
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .day-date-input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 2px 4px;
+    cursor: pointer;
+    outline: none;
+    width: 140px;
+  }
+  .day-date-input:hover { border-color: var(--accent2); }
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.25rem 0;
+  }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    font-family: sans-serif;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .habit-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+  }
+  .habit-card:hover { border-color: var(--border2); }
+  .habit-card.completed { border-color: rgba(90,154,106,0.3); background: rgba(90,154,106,0.04); }
+  .habit-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .habit-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .habit-title {
+    font-size: 14px;
+    font-family: sans-serif;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .habit-subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: sans-serif;
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.3rem 0;
+  }
+  .cb {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border2);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: none;
+    font-size: 11px;
+    color: transparent;
+  }
+  .cb:hover { border-color: var(--accent2); }
+  .cb.checked { background: var(--green); border-color: var(--green); color: white; }
+  .cb-label {
+    font-size: 13px;
+    font-family: sans-serif;
+    color: var(--text2);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .cb.checked + .cb-label { color: var(--text3); text-decoration: line-through; }
+  .notes-area {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    padding: 0.6rem 0.75rem;
+    resize: vertical;
+    outline: none;
+    min-height: 60px;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    transition: border-color 0.15s;
+  }
+  .notes-area:focus { border-color: var(--accent2); }
+  .notes-area::placeholder { color: var(--text3); font-style: italic; }
+  .notes-label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: sans-serif;
+    margin-top: 0.6rem;
+    margin-bottom: 0.25rem;
+  }
+  .link-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-family: sans-serif;
+    color: var(--blue);
+    background: var(--blue-bg);
+    border-radius: 20px;
+    padding: 3px 10px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    margin-top: 0.4rem;
+  }
+  .link-pill:hover { opacity: 0.7; }
+  .podcast-title {
+    font-size: 13px;
+    font-family: sans-serif;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .podcast-host {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: sans-serif;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-family: sans-serif;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .tag-water { background: var(--blue-bg); color: var(--blue); }
+  .tag-philosophy { background: var(--purple-bg); color: var(--purple); }
+  .tag-spanish { background: var(--coral-bg); color: var(--coral); }
+  .tag-geo { background: var(--teal-bg); color: var(--teal); }
+  .tag-politics { background: var(--blue-bg); color: var(--blue); }
+  .tag-workout { background: var(--green-bg); color: var(--green); }
+  .tag-podcast { background: var(--gold-bg); color: var(--gold); }
+  .reflection-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+  }
+  .reflection-q {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--accent);
+    font-family: 'Georgia', serif;
+    margin-bottom: 0.5rem;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .mini-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: sans-serif;
+  }
+  .mini-card-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .mini-card-val {
+    font-size: 20px;
+    font-family: 'Georgia', serif;
+    color: var(--accent);
+  }
+  .overview-page { display: none; }
+  .overview-page.active { display: block; }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 6px;
+    margin-top: 1rem;
+  }
+  .overview-day-btn {
+    aspect-ratio: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: sans-serif;
+  }
+  .overview-day-btn:hover { border-color: var(--accent2); background: var(--bg3); }
+  .overview-day-btn.done { border-color: rgba(90,154,106,0.4); background: rgba(90,154,106,0.07); }
+  .overview-day-num {
+    font-size: 18px;
+    font-family: 'Georgia', serif;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .overview-day-label {
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 3px;
+  }
+  .star { color: var(--green); font-size: 10px; }
+  .week-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    font-family: sans-serif;
+    margin: 1.5rem 0 0.5rem;
+  }
+  @media (max-width: 700px) {
+    .sidebar { width: 200px; }
+    .main { margin-left: 200px; }
+    .content { padding: 1.25rem 1.25rem 3rem; }
+    .top-bar { padding: 1rem 1.25rem; }
+    .grid2 { grid-template-columns: 1fr; }
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">45 Days</div>
+    <div class="sidebar-subtitle">Better Version of Me</div>
+  </div>
+  <div style="padding: 0.5rem 0.75rem;">
+    <button class="day-btn active" onclick="showOverview()" id="overview-btn">
+      <span class="dot" style="background:var(--accent)"></span> Overview
+    </button>
+  </div>
+  <div class="sidebar-section">Weeks</div>
+  <div id="weeks-nav"></div>
+</nav>
+
+<div class="main">
+  <div class="top-bar">
+    <div class="top-title">Better Version of <span>Me</span></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-pct">0 / 45 days</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="overview-page active" id="overview-page">
+      <div class="day-hero">
+        <div class="day-number">45</div>
+        <div>
+          <div class="day-label">Day Challenge</div>
+          <div style="font-size:13px;color:var(--text3);font-family:sans-serif;margin-top:2px;">Your journey to a better version of yourself</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid2" style="max-width:400px">
+        <div class="mini-card">
+          <div class="mini-card-label">Days Completed</div>
+          <div class="mini-card-val" id="ov-done">0</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-label">Streak</div>
+          <div class="mini-card-val" id="ov-streak">0 🔥</div>
+        </div>
+      </div>
+      <div class="section-label">All 45 Days</div>
+      <div id="overview-grid-container"></div>
+    </div>
+    <div id="days-container"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  philosophy: [
+    "Marcus Aurelius – Meditations, Book II",
+    "Marcus Aurelius – Meditations, Book IV",
+    "Epictetus – Enchiridion, Part 1",
+    "Epictetus – Enchiridion, Part 2",
+    "Seneca – On the Shortness of Life",
+    "Seneca – On Tranquility of Mind",
+    "Seneca – Letters from a Stoic (selected)",
+    "Plato – Allegory of the Cave",
+    "Plato – Apology (summary version)",
+    "Aristotle – Nicomachean Ethics, Book I",
+    "Aristotle – The Golden Mean",
+    "Lao Tzu – Tao Te Ching, Ch. 1–20",
+    "Lao Tzu – Tao Te Ching, Ch. 21–40",
+    "Lao Tzu – Tao Te Ching, Ch. 41–60",
+    "Machiavelli – The Prince, selected chapters",
+    "Descartes – Meditations I",
+    "Descartes – Meditations II",
+    "David Hume – Of the Standard of Taste",
+    "John Stuart Mill – On Liberty (selected)",
+    "Nietzsche – Thus Spoke Zarathustra (selected)",
+    "Albert Camus – The Myth of Sisyphus",
+    "Sartre – Existentialism is a Humanism",
+    "Bertrand Russell – In Praise of Idleness",
+    "Bertrand Russell – A Liberal Decalogue",
+    "Viktor Frankl – Man's Search for Meaning (excerpts)",
+    "Hannah Arendt – Thinking and Moral Considerations",
+    "Emerson – Self-Reliance",
+    "Thoreau – Civil Disobedience",
+    "Orwell – Politics and the English Language",
+    "Carl Jung – The Shadow (excerpts)",
+    "Schopenhauer – On the Suffering of the World",
+    "Simone de Beauvoir – The Ethics of Ambiguity (selected)",
+    "Wittgenstein – Tractatus (selected propositions)",
+    "Kant – What is Enlightenment?",
+    "Pascal – Pensées (selected)",
+    "Montaigne – On Experience",
+    "Re-read: your favourite essay from Week 1",
+    "Re-read: your favourite essay from Week 2",
+    "Re-read: your favourite essay from Week 3",
+    "Re-read: your favourite essay from Week 4",
+    "Re-read: your favourite essay from Week 5",
+    "Write notes on the 5 ideas that changed you most",
+    "Free choice: any essay you discovered this month",
+    "Free choice: any essay you discovered this month",
+    "Final reflection: how has your thinking changed?"
+  ],
+  politics: [
+    { title: "Introduction to U.S. Government & Politics", url: "https://www.youtube.com/watch?v=lrk4oY7UxpQ", ep: "#1" },
+    { title: "The Bicameral Congress", url: "https://www.youtube.com/watch?v=xbMOPYp9g1Q", ep: "#2" },
+    { title: "Separation of Powers & Checks and Balances", url: "https://www.youtube.com/watch?v=HuFR3Y4DBDA", ep: "#3" },
+    { title: "Federalism", url: "https://www.youtube.com/watch?v=J0gosGXSgsI", ep: "#4" },
+    { title: "Constitutional Compromises", url: "https://www.youtube.com/watch?v=WiUrE9EFNXc", ep: "#5" },
+    { title: "Congressional Elections", url: "https://www.youtube.com/watch?v=tRdm2CV9FYM", ep: "#6" },
+    { title: "Congressional Committees", url: "https://www.youtube.com/watch?v=R1JTQTB_z_M", ep: "#7" },
+    { title: "Congressional Leadership", url: "https://www.youtube.com/watch?v=W6YsKJFKsNA", ep: "#8" },
+    { title: "How a Bill Becomes a Law", url: "https://www.youtube.com/watch?v=OgVKvqTItto", ep: "#9" },
+    { title: "Congressional Decisions", url: "https://www.youtube.com/watch?v=dZjRuE-qjoc", ep: "#10" },
+    { title: "Presidential Power", url: "https://www.youtube.com/watch?v=T-IUVHD9SC4", ep: "#11" },
+    { title: "Presidential Powers 2", url: "https://www.youtube.com/watch?v=aVSvMFwJAFg", ep: "#12" },
+    { title: "Congressional Delegation", url: "https://www.youtube.com/watch?v=0OhacnE-wNE", ep: "#13" },
+    { title: "How Presidents Govern", url: "https://www.youtube.com/watch?v=s0xNR6Y2wEY", ep: "#14" },
+    { title: "Bureaucracy Basics", url: "https://www.youtube.com/watch?v=8q3SBfpQWak", ep: "#15" },
+    { title: "Types of Bureaucracies", url: "https://www.youtube.com/watch?v=5y4pSVuXCBs", ep: "#16" },
+    { title: "Controlling Bureaucracies", url: "https://www.youtube.com/watch?v=GlDzMt1QKGM", ep: "#17" },
+    { title: "Legal System Basics", url: "https://www.youtube.com/watch?v=2a4vouGgALk", ep: "#18" },
+    { title: "Structure of the Court System", url: "https://www.youtube.com/watch?v=oWGbJtLPZI0", ep: "#19" },
+    { title: "Supreme Court Procedures", url: "https://www.youtube.com/watch?v=TdtM3tJtHqI", ep: "#20" },
+    { title: "Judicial Review", url: "https://www.youtube.com/watch?v=tBtgJKYCjSU", ep: "#21" },
+    { title: "Judicial Decisions", url: "https://www.youtube.com/watch?v=8vQUn3kAkFI", ep: "#22" },
+    { title: "The 14th Amendment", url: "https://www.youtube.com/watch?v=zyP-pZJFnkk", ep: "#23" },
+    { title: "Civil Liberties", url: "https://www.youtube.com/watch?v=7HuqkdZa_V4", ep: "#24" },
+    { title: "Freedom of Religion", url: "https://www.youtube.com/watch?v=3AEi6Wx50yk", ep: "#25" },
+    { title: "Freedom of Speech", url: "https://www.youtube.com/watch?v=XZ66ETKj2nY", ep: "#26" },
+    { title: "Gun Control and the 2nd Amendment", url: "https://www.youtube.com/watch?v=x-oLLNVBxCI", ep: "#27" },
+    { title: "Affirmative Action", url: "https://www.youtube.com/watch?v=Mk2mHMXbFso", ep: "#28" },
+    { title: "Civil Rights", url: "https://www.youtube.com/watch?v=MFpEDyJe4ec", ep: "#29" },
+    { title: "Political Parties", url: "https://www.youtube.com/watch?v=ABgNhkXopIg", ep: "#30" },
+    { title: "Political Parties & Elections", url: "https://www.youtube.com/watch?v=oHTa5OfVN40", ep: "#31" },
+    { title: "Money in Politics", url: "https://www.youtube.com/watch?v=AzAbVl5pz9w", ep: "#32" },
+    { title: "The Media", url: "https://www.youtube.com/watch?v=BN9nIHiNsSM", ep: "#33" },
+    { title: "The Media 2: Government Influence", url: "https://www.youtube.com/watch?v=9-sU1jvSLaM", ep: "#34" },
+    { title: "Interest Groups", url: "https://www.youtube.com/watch?v=7XXKV6Hs8gY", ep: "#35" },
+    { title: "Economic Policy", url: "https://www.youtube.com/watch?v=4aFgRuFTFzE", ep: "#36" },
+    { title: "Monetary and Fiscal Policy", url: "https://www.youtube.com/watch?v=4O0pPTSMIBE", ep: "#37" },
+    { title: "Social Policy", url: "https://www.youtube.com/watch?v=1yMLMUHGXMY", ep: "#38" },
+    { title: "Foreign Policy", url: "https://www.youtube.com/watch?v=UAXzGCHmJHg", ep: "#39" },
+    { title: "Political Participation", url: "https://www.youtube.com/watch?v=0sQmOzYIjIQ", ep: "#40" },
+    { title: "Political Ideology", url: "https://www.youtube.com/watch?v=dXAx8bNkEQo", ep: "#41" },
+    { title: "Public Opinion", url: "https://www.youtube.com/watch?v=oORcLGUFDAI", ep: "#42" },
+    { title: "Voting and Voter Registration", url: "https://www.youtube.com/watch?v=XNUB6kLEtY8", ep: "#43" },
+    { title: "Campaigns", url: "https://www.youtube.com/watch?v=9Ox_6vFt8Yg", ep: "#44" },
+    { title: "Presidential Elections", url: "https://www.youtube.com/watch?v=Y7oKOGDfFpM", ep: "#45" }
+  ],
+  geo_crash: [
+    { title: "What is Geography?", url: "https://www.youtube.com/watch?v=JYnCCEjNTkQ", ep: "#1" },
+    { title: "What is a Map?", url: "https://www.youtube.com/watch?v=4RlpMhBKNEM", ep: "#2" },
+    { title: "What is Space and How Do We Study It?", url: "https://www.youtube.com/watch?v=8Ll2ub-3iKM", ep: "#3" },
+    { title: "What is Physical Geography?", url: "https://www.youtube.com/watch?v=7P-W1xfZ5mY", ep: "#4" },
+    { title: "How Does the Earth Move?", url: "https://www.youtube.com/watch?v=KGalDKfT6Dc", ep: "#5" },
+    { title: "What Does the Atmosphere Do?", url: "https://www.youtube.com/watch?v=oqSFcXn5cKY", ep: "#6" },
+    { title: "How Does Air Temperature Shape a Place?", url: "https://www.youtube.com/watch?v=6oA0GFxQf0I", ep: "#7" },
+    { title: "Where Does Wind Come From?", url: "https://www.youtube.com/watch?v=YbAWny7FV3w", ep: "#8" },
+    { title: "How Do Oceans Circulate?", url: "https://www.youtube.com/watch?v=cwCXvbp2Pxk", ep: "#9" },
+    { title: "What is a Cloud?", url: "https://www.youtube.com/watch?v=JoWlMfHGhzg", ep: "#10" },
+    { title: "Precipitation and Water Use", url: "https://www.youtube.com/watch?v=wHdHrUiJ_h8", ep: "#11" },
+    { title: "Types of Cyclones", url: "https://www.youtube.com/watch?v=jz5rUYqWvUM", ep: "#12" },
+    { title: "How Do We Classify Climates?", url: "https://www.youtube.com/watch?v=3FT8LPQRMYQ", ep: "#13" },
+    { title: "What is Climate Change?", url: "https://www.youtube.com/watch?v=EewPCHvfRSs", ep: "#14" },
+    { title: "What Are Ecosystems?", url: "https://www.youtube.com/watch?v=Ds1YKD7ruoY", ep: "#15" },
+    { title: "Population & Food", url: "https://www.youtube.com/watch?v=aeLVAFn18ts", ep: "#16" },
+    { title: "What is Soil and Why is it Important?", url: "https://www.youtube.com/watch?v=GZiYGtg7GFQ", ep: "#17" },
+    { title: "What Are Rocks and How Do They Form?", url: "https://www.youtube.com/watch?v=VFJQhaCGkyc", ep: "#18" },
+    { title: "The Plate Tectonics Revolution", url: "https://www.youtube.com/watch?v=EIdslS1cn-I", ep: "#19" },
+    { title: "Rivers & Streams", url: "https://www.youtube.com/watch?v=3x8hXaHCQtI", ep: "#20" },
+    { title: "Coastlines and Oceans", url: "https://www.youtube.com/watch?v=pIkDdVqzQJI", ep: "#21" },
+    { title: "What is Human Geography?", url: "https://www.youtube.com/watch?v=Ls8pMQLWfAg", ep: "#22" },
+    { title: "Migration", url: "https://www.youtube.com/watch?v=mzLbSHnHHcA", ep: "#23" },
+    { title: "Urbanization", url: "https://www.youtube.com/watch?v=R7A9sI07XpU", ep: "#24" },
+    { title: "Language and Culture", url: "https://www.youtube.com/watch?v=P0MPdQZI-8E", ep: "#25" },
+    { title: "Religion and Geography", url: "https://www.youtube.com/watch?v=vDiRxXHy1hs", ep: "#26" },
+    { title: "Ethnicity and Geography", url: "https://www.youtube.com/watch?v=x3bFfGINHs0", ep: "#27" },
+    { title: "Political Geography", url: "https://www.youtube.com/watch?v=IIIolDEA5V8", ep: "#28" },
+    { title: "Geopolitics", url: "https://www.youtube.com/watch?v=9ot_e_IWifI", ep: "#29" },
+    { title: "Economic Geography", url: "https://www.youtube.com/watch?v=o1HlAMrb7Ww", ep: "#30" },
+    { title: "Agriculture and Land Use", url: "https://www.youtube.com/watch?v=4_kzY8rN2Lk", ep: "#31" },
+    { title: "Global Trade", url: "https://www.youtube.com/watch?v=gM-YFv0_ZXQ", ep: "#32" },
+    { title: "Development Geography", url: "https://www.youtube.com/watch?v=k9vB1eNI5GE", ep: "#33" },
+    { title: "Environmental Justice", url: "https://www.youtube.com/watch?v=OT8MfR2Bvec", ep: "#34" },
+    { title: "Natural Resources", url: "https://www.youtube.com/watch?v=Kc3uYcLHNYI", ep: "#35" },
+    { title: "Africa", url: "https://www.youtube.com/watch?v=dXzMgwOuqzs", ep: "#36" },
+    { title: "East Asia", url: "https://www.youtube.com/watch?v=dAB-mBOLxME", ep: "#37" },
+    { title: "South Asia", url: "https://www.youtube.com/watch?v=eUu2I0lTFgE", ep: "#38" },
+    { title: "Europe", url: "https://www.youtube.com/watch?v=MKUkEDLb1Lk", ep: "#39" },
+    { title: "The Americas", url: "https://www.youtube.com/watch?v=bFVGmQB1p8E", ep: "#40" },
+    { title: "The Middle East", url: "https://www.youtube.com/watch?v=ZEWbOTOQ6nQ", ep: "#41" },
+    { title: "Oceans and Seas", url: "https://www.youtube.com/watch?v=zZ4Ol2BSpRU", ep: "#42" },
+    { title: "Climate Regions of the World", url: "https://www.youtube.com/watch?v=gM-YFv0_ZXQ", ep: "#43" },
+    { title: "World Cities", url: "https://www.youtube.com/watch?v=9-r3y7bNpW0", ep: "#44" },
+    { title: "Geography and the Future", url: "https://www.youtube.com/watch?v=_lQMuG8AjLc", ep: "#45" }
+  ],
+  geo_practice: [
+    "Sporcle: Name All Countries of the World (sporcle.com/games/g/world)",
+    "Sporcle: Name Every Country's Capital (sporcle.com/games/g/worldcapitals)",
+    "Sporcle: Flags of the World (sporcle.com/games/g/worldflags)",
+    "Sporcle: Countries of Europe (sporcle.com/games/g/europe)",
+    "Sporcle: Countries of Asia (sporcle.com/games/g/asia)",
+    "Sporcle: Countries of Africa (sporcle.com/games/g/africa)",
+    "Sporcle: US States Quiz (sporcle.com/games/g/usstates)",
+    "Sporcle: Biggest Countries by Area (sporcle.com/games/quizmaster/biggestcountries)",
+    "Sporcle: Countries of South America (sporcle.com/games/g/southamerica)",
+    "Sporcle: European Capitals (sporcle.com/games/g/europeancapitals)",
+    "Sporcle: Asian Capitals (sporcle.com/games/g/asiancapitals)",
+    "Sporcle: World Oceans and Seas (sporcle.com)",
+    "Sporcle: Major Rivers of the World (sporcle.com)",
+    "Sporcle: Longest Rivers (sporcle.com)",
+    "Sporcle: Tallest Mountains (sporcle.com/games/g/highestpeaks)",
+    "Sporcle: Flags of Europe (sporcle.com/games/sproutcm/european-flags)",
+    "Sporcle: Flags of Asia (sporcle.com/games/g/asiaflags)",
+    "Sporcle: Flags of Africa (sporcle.com)",
+    "Sporcle: Biggest Economies in the World (GDP quiz)",
+    "Sporcle: US State Capitals (sporcle.com)",
+    "Sporcle: Countries of the Caribbean (sporcle.com)",
+    "Sporcle: Island Nations of the World (sporcle.com)",
+    "Sporcle: Landlocked Countries (sporcle.com)",
+    "Sporcle: Countries Bordering Russia (sporcle.com)",
+    "Sporcle: Most Populated Countries (sporcle.com)",
+    "Sporcle: Countries Bordering China (sporcle.com)",
+    "Sporcle: Middle East Countries (sporcle.com)",
+    "Sporcle: NATO Members (sporcle.com)",
+    "Sporcle: Countries That Start with A (sporcle.com)",
+    "Sporcle: Random World Capitals (sporcle.com)",
+    "Sporcle: Countries by Clue — Europe (sporcle.com)",
+    "Sporcle: Countries by Clue — Asia (sporcle.com)",
+    "Sporcle: Flags of the Americas (sporcle.com)",
+    "Sporcle: World Heritage Sites (sporcle.com)",
+    "Sporcle: Flags of Oceania (sporcle.com)",
+    "Sporcle: Deserts of the World (sporcle.com)",
+    "Sporcle: African Capitals (sporcle.com)",
+    "Sporcle: Countries of Oceania (sporcle.com)",
+    "Sporcle: Lakes of the World (sporcle.com)",
+    "Sporcle: Countries Ending in 'stan' (sporcle.com)",
+    "Sporcle: Countries with 4 Letters (sporcle.com)",
+    "Sporcle: Mixed Geography Blitz (sporcle.com)",
+    "Sporcle: Geography Speed Round (sporcle.com)",
+    "Sporcle: Revisit your weakest quiz from this week",
+    "Sporcle: Personal challenge — beat your top score"
+  ],
+  podcasts: [
+    { show: "Intelligence Squared", ep: "Should We Eat Less Meat? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Intelligence Squared", ep: "Is Democracy Dying? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Intelligence Squared", ep: "Does Capitalism Need to be Fixed? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Munk Debates", ep: "Has the West Lost Its Way? — Frum vs. Bannon", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Munk Debates", ep: "Do Humankind's Best Days Lie Ahead?", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Freakonomics Radio", ep: "Why You Are Who You Are", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Freakonomics Radio", ep: "Is the American Dream Really Dead?", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Freakonomics Radio", ep: "The True Story of the Gender Pay Gap", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Lex Fridman Podcast", ep: "#370 — Roger Penrose: Physics of Consciousness", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Lex Fridman Podcast", ep: "#309 — John Carmack: Future of AI", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Lex Fridman Podcast", ep: "#154 — Niall Ferguson: History and the Present", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Intelligence Squared", ep: "Globalisation Has Failed the Poor (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "The Diary of a CEO", ep: "#208 — The Secrets of the Human Mind", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "The Diary of a CEO", ep: "#176 — Sam Altman on AI", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "Hidden Brain", ep: "The Secret to Getting Ahead", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "Hidden Brain", ep: "How to Change Your Mind", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "Hidden Brain", ep: "The Optimism Bias", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "Freakonomics Radio", ep: "People I (Mostly) Admire — Naval Ravikant", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Munk Debates", ep: "Be It Resolved: The West Should Cut Ties with China", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Munk Debates", ep: "Be It Resolved: AI is a Threat to Humanity", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Intelligence Squared", ep: "Does God Exist? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Lex Fridman Podcast", ep: "#252 — Walter Isaacson: Elon Musk & History", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "The Diary of a CEO", ep: "#315 — The Discipline Episode", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "Hidden Brain", ep: "The Herd: Why We Follow the Crowd", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "Freakonomics Radio", ep: "The Dark Side of a Good Reputation", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Intelligence Squared", ep: "Free Speech Under Threat? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Lex Fridman Podcast", ep: "#430 — Yuval Noah Harari: Future of Humanity", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Munk Debates", ep: "Foreign Policy: Intervention vs. Non-intervention", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Hidden Brain", ep: "Why We Lie to Ourselves", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "The Diary of a CEO", ep: "#388 — Andrew Huberman: Your Brain on Stress", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "Freakonomics Radio", ep: "America's Hidden Duopoly (Education)", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Intelligence Squared", ep: "Should Drugs Be Legalised? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Lex Fridman Podcast", ep: "#188 — Vitalik Buterin: Ethereum & the Future", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Munk Debates", ep: "Be It Resolved: The Future is Multipolar", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Hidden Brain", ep: "What Makes You You?", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "The Diary of a CEO", ep: "The Most Successful People Think Differently", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "Intelligence Squared", ep: "Is Universal Basic Income a Good Idea? (Debate)", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Freakonomics Radio", ep: "Why Isn't the Whole World Developed?", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "Lex Fridman Podcast", ep: "#102 — Steven Pinker: Language, Reason, and AI", host: "Lex Fridman", url: "https://open.spotify.com/show/2MAi0BvDc6GTFvKFPXnkCL" },
+    { show: "Munk Debates", ep: "Big Tech: Threat or Promise?", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" },
+    { show: "Hidden Brain", ep: "The Power of Bad — Why Negativity Dominates", host: "Shankar Vedantam", url: "https://open.spotify.com/show/20Gf4IAauFrfj7RBkjcWxh" },
+    { show: "Freakonomics Radio", ep: "The Truth About Self-Control", host: "Stephen Dubner", url: "https://open.spotify.com/show/6z4NLXyHPga1UmSJsPK7G1" },
+    { show: "The Diary of a CEO", ep: "Final Reflection — Build Systems for Life", host: "Steven Bartlett", url: "https://open.spotify.com/show/7iQXmUT7XGuZSzAMjoNWlX" },
+    { show: "Intelligence Squared", ep: "Is the Future of the World Liberal Democracy?", host: "Intelligence Squared Debates", url: "https://open.spotify.com/show/7gnNY9Fy8QSRbjXZ00A9jW" },
+    { show: "Munk Debates", ep: "The 21st Century Belongs to China (Debate)", host: "Munk Debates", url: "https://open.spotify.com/show/5S5SViYxjGrQGNmCfqBHJU" }
+  ],
+  workouts: [
+    "Upper body — Push (chest, shoulders, triceps)",
+    "Lower body — Squat & glutes",
+    "Pull (back, biceps, rear delts)",
+    "Core & conditioning (HIIT)",
+    "Full body compound lifts",
+    "Active recovery run or long walk",
+    "REST DAY — Stretch & mobility",
+    "Upper body — Push",
+    "Lower body — Romanian deadlifts + lunges",
+    "Pull + face pulls",
+    "HIIT — Tabata sprints or jump rope",
+    "Full body — functional movement",
+    "Active recovery — yoga or swim",
+    "REST DAY — Stretch & mobility",
+    "Upper body — heavier Push",
+    "Lower body — Squat PR attempt",
+    "Pull — weighted rows",
+    "Core — planks, hollow holds, L-sits",
+    "Cardio — 30 min run",
+    "Full body circuit",
+    "REST DAY — Stretch & mobility",
+    "Upper — Push superset",
+    "Lower — Hip hinge focus",
+    "Pull — chin-up progression",
+    "HIIT — 30s on 15s off × 10",
+    "Full body — time under tension",
+    "Active recovery — walk 5km+",
+    "REST DAY — Stretch & mobility",
+    "Upper — Push to failure",
+    "Lower — Front squat + leg press",
+    "Pull — superset rows & curls",
+    "Cardio — stairs or bike",
+    "Full body — CrossFit-style",
+    "Active recovery — swim or yoga",
+    "REST DAY — Stretch & mobility",
+    "Upper — max reps Push",
+    "Lower — Bulgarian split squats",
+    "Pull — PR attempt",
+    "HIIT — Sprint intervals outdoors",
+    "Full body — favourite circuit",
+    "Active recovery — long walk",
+    "REST DAY — Stretch & mobility",
+    "Upper — Push",
+    "Lower — Squat",
+    "Full body — final push",
+    "REST DAY — Celebrate your streak!"
+  ]
+};
+
+const state = JSON.parse(localStorage.getItem('45day_v2') || '{}');
+function save() { localStorage.setItem('45day_v2', JSON.stringify(state)); }
+
+function getDay(d) { return state[`d${d}`] || {}; }
+function setDay(d, obj) { state[`d${d}`] = obj; save(); updateProgress(); }
+
+function isDayDone(d) {
+  const s = getDay(d);
+  return s.water && s.philosophy && s.spanish && s.geo && s.politics && s.workout && s.podcast;
+}
+
+function updateProgress() {
+  let done = 0;
+  for (let i = 1; i <= 45; i++) if (isDayDone(i)) done++;
+  document.getElementById('progress-pct').textContent = done + ' / 45 days';
+  document.getElementById('progress-fill').style.width = Math.round((done/45)*100) + '%';
+  document.getElementById('ov-done').textContent = done;
+
+  let streak = 0;
+  for (let i = 1; i <= 45; i++) {
+    if (isDayDone(i)) streak++; else break;
+  }
+  document.getElementById('ov-streak').textContent = streak + ' 🔥';
+
+  document.querySelectorAll('.day-btn[data-day]').forEach(btn => {
+    const d = parseInt(btn.dataset.day);
+    btn.classList.toggle('done', isDayDone(d));
+    btn.querySelector('.dot').style.background = isDayDone(d) ? 'var(--green)' : 'var(--text3)';
+  });
+
+  const grid = document.getElementById('overview-grid-container');
+  if (grid) {
+    grid.querySelectorAll('.overview-day-btn').forEach(btn => {
+      const d = parseInt(btn.dataset.day);
+      btn.classList.toggle('done', isDayDone(d));
+    });
+  }
+}
+
+function showOverview() {
+  document.querySelectorAll('.day-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('overview-page').classList.add('active');
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('overview-btn').classList.add('active');
+  updateProgress();
+}
+
+function showDay(d) {
+  document.querySelectorAll('.day-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('overview-page').classList.remove('active');
+  const page = document.getElementById(`day-page-${d}`);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.day-btn[data-day="${d}"]`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toggleCheck(dayNum, key, el) {
+  const s = getDay(dayNum);
+  s[key] = !s[key];
+  setDay(dayNum, s);
+  el.classList.toggle('checked', !!s[key]);
+  const card = el.closest('.habit-card');
+  if (card) {
+    const allCbs = card.querySelectorAll('.cb');
+    const allDone = Array.from(allCbs).every(c => c.classList.contains('checked'));
+    card.classList.toggle('completed', allDone);
+  }
+}
+
+function saveNote(dayNum, key, val) {
+  const s = getDay(dayNum);
+  s[key] = val;
+  setDay(dayNum, s);
+}
+
+function buildSidebar() {
+  const nav = document.getElementById('weeks-nav');
+  const weeks = [
+    [1,7,"Week 1 — The Foundation"],
+    [8,14,"Week 2 — Ancient Wisdom"],
+    [15,21,"Week 3 — Modern Thought"],
+    [22,28,"Week 4 — Existentialism"],
+    [29,35,"Week 5 — Transcendentalism"],
+    [36,42,"Week 6 — Synthesis"],
+    [43,45,"Final Push"]
+  ];
+  weeks.forEach(([start,end,label], wi) => {
+    const wr = document.createElement('div');
+    wr.className = 'sidebar-week';
+    const wh = document.createElement('button');
+    wh.className = 'week-header';
+    wh.innerHTML = `<span>${label}</span><span style="font-size:10px;opacity:.5">▾</span>`;
+    const wd = document.createElement('div');
+    wd.className = 'week-days' + (wi === 0 ? ' open' : '');
+    wh.onclick = () => wd.classList.toggle('open');
+    for (let d = start; d <= end; d++) {
+      const db = document.createElement('button');
+      db.className = 'day-btn';
+      db.dataset.day = d;
+      db.innerHTML = `<span class="dot"></span> Day ${d}`;
+      db.onclick = () => showDay(d);
+      wd.appendChild(db);
+    }
+    wr.appendChild(wh);
+    wr.appendChild(wd);
+    nav.appendChild(wr);
+  });
+}
+
+function buildOverviewGrid() {
+  const cont = document.getElementById('overview-grid-container');
+  const weeks = [
+    [1,7,"Week 1 — The Foundation"],
+    [8,14,"Week 2 — Ancient Wisdom"],
+    [15,21,"Week 3 — Modern Thought"],
+    [22,28,"Week 4 — Existentialism"],
+    [29,35,"Week 5 — Transcendentalism"],
+    [36,42,"Week 6 — Synthesis"],
+    [43,45,"Final Push"]
+  ];
+  weeks.forEach(([start,end,label]) => {
+    const wl = document.createElement('div');
+    wl.className = 'week-label';
+    wl.textContent = label;
+    cont.appendChild(wl);
+    const grid = document.createElement('div');
+    grid.className = 'overview-grid';
+    for (let d = start; d <= end; d++) {
+      const btn = document.createElement('div');
+      btn.className = 'overview-day-btn';
+      btn.dataset.day = d;
+      btn.innerHTML = `<div class="overview-day-num">${d}</div><div class="overview-day-label">Day ${d}</div>`;
+      btn.onclick = () => showDay(d);
+      grid.appendChild(btn);
+    }
+    cont.appendChild(grid);
+  });
+}
+
+function buildDays() {
+  const cont = document.getElementById('days-container');
+  for (let d = 1; d <= 45; d++) {
+    const s = getDay(d);
+    const phil = DATA.philosophy[d-1];
+    const pol = DATA.politics[d-1];
+    const geo = DATA.geo_crash[d-1];
+    const geoPrac = DATA.geo_practice[d-1];
+    const pod = DATA.podcasts[d-1];
+    const wkt = DATA.workouts[d-1];
+    const isRest = wkt.toLowerCase().includes('rest');
+
+    const page = document.createElement('div');
+    page.className = 'day-page';
+    page.id = `day-page-${d}`;
+
+    page.innerHTML = `
+<div class="day-hero">
+  <div class="day-number">${d}</div>
+  <div>
+    <div class="day-label">Day ${d} of 45</div>
+    <input type="date" class="day-date-input" value="${s.date||''}" onchange="saveNote(${d},'date',this.value)" placeholder="Set date">
+  </div>
+</div>
+<div class="divider"></div>
+
+<div class="section-label">Daily non-negotiables</div>
+<div class="habit-card${s.water?'completed':''}" id="dc-water-${d}">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--blue-bg);color:var(--blue)">💧</div>
+    <div><div class="habit-title">Water Intake</div><div class="habit-subtitle">2 litres minimum today</div></div>
+    <span class="tag tag-water" style="margin-left:auto">Water</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.water?'checked':''}" onclick="toggleCheck(${d},'water',this)">✓</div>
+    <span class="cb-label">Reached 2 litres of water today</span>
+  </div>
+  <div class="notes-label">Notes</div>
+  <textarea class="notes-area" rows="2" placeholder="How did you feel? Reminders that worked..." onchange="saveNote(${d},'water_notes',this.value)">${s.water_notes||''}</textarea>
+</div>
+
+<div class="section-label">Philosophy — 15 mins</div>
+<div class="habit-card${s.philosophy?'completed':''}">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--purple-bg);color:var(--purple)">📖</div>
+    <div><div class="habit-title">${phil}</div><div class="habit-subtitle">Read slowly. Take one note.</div></div>
+    <span class="tag tag-philosophy" style="margin-left:auto">Philosophy</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.philosophy?'checked':''}" onclick="toggleCheck(${d},'philosophy',this)">✓</div>
+    <span class="cb-label">Read today's essay / passage</span>
+  </div>
+  <div class="notes-label">Key idea from today's reading</div>
+  <textarea class="notes-area" rows="3" placeholder="What stood out? What challenged you? Quote or paraphrase the best line..." onchange="saveNote(${d},'phil_notes',this.value)">${s.phil_notes||''}</textarea>
+  <div class="notes-label">What belief shifted today?</div>
+  <textarea class="notes-area" rows="2" placeholder="Even a small shift counts..." onchange="saveNote(${d},'belief_shift',this.value)">${s.belief_shift||''}</textarea>
+</div>
+
+<div class="section-label">Spanish — 30 mins</div>
+<div class="habit-card">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--coral-bg);color:var(--coral)">🗣️</div>
+    <div><div class="habit-title">Spanish Daily Practice</div><div class="habit-subtitle">Use Gemini or ChatGPT — speak every single day</div></div>
+    <span class="tag tag-spanish" style="margin-left:auto">Spanish</span>
+  </div>
+  <div style="font-size:11px;color:var(--text3);font-family:sans-serif;background:var(--bg3);border-radius:6px;padding:0.6rem 0.75rem;margin-bottom:0.5rem;line-height:1.6;border:1px solid var(--border)">
+    <strong style="color:var(--accent);font-weight:500">Gemini prompt:</strong> "You are my Spanish tutor. Speak only beginner Spanish. Correct all my mistakes immediately. Teach me 10 new words and one grammar rule. Day ${d}."
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.sp1?'checked':''}" onclick="toggleCheck(${d},'sp1',this)">✓</div>
+    <span class="cb-label">Learned 10 new words (10 min)</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.sp2?'checked':''}" onclick="toggleCheck(${d},'sp2',this)">✓</div>
+    <span class="cb-label">Studied one grammar concept (10 min)</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.sp3?'checked':''}" onclick="toggleCheck(${d},'sp3',this)">✓</div>
+    <span class="cb-label">Spoke Spanish with Gemini / ChatGPT (10 min)</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.spanish?'checked':''}" onclick="toggleCheck(${d},'spanish',this)">✓</div>
+    <span class="cb-label" style="font-weight:500">Mark full Spanish block done</span>
+  </div>
+  <div class="notes-label">10 words learned today</div>
+  <textarea class="notes-area" rows="3" placeholder="List your 10 new words and their meanings..." onchange="saveNote(${d},'spanish_words',this.value)">${s.spanish_words||''}</textarea>
+  <div class="notes-label">Grammar rule studied</div>
+  <textarea class="notes-area" rows="2" placeholder="Explain the rule in your own words..." onchange="saveNote(${d},'spanish_grammar',this.value)">${s.spanish_grammar||''}</textarea>
+  <div class="notes-label">Conversation summary</div>
+  <textarea class="notes-area" rows="2" placeholder="What did you talk about? What was hard?" onchange="saveNote(${d},'spanish_convo',this.value)">${s.spanish_convo||''}</textarea>
+</div>
+
+<div class="section-label">Geography — 25 mins total</div>
+<div class="habit-card">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--teal-bg);color:var(--teal)">🌍</div>
+    <div><div class="habit-title">Geography Block</div><div class="habit-subtitle">10 min video + 15 min Sporcle quiz</div></div>
+    <span class="tag tag-geo" style="margin-left:auto">Geography</span>
+  </div>
+  <div style="background:var(--bg3);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.5rem;border:1px solid var(--border)">
+    <div style="font-size:11px;color:var(--text3);font-family:sans-serif;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Crash Course Geography ${geo.ep}</div>
+    <div style="font-size:13px;font-family:sans-serif;color:var(--text);margin-bottom:6px">${geo.title}</div>
+    <a href="${geo.url}" target="_blank" class="link-pill">▶ Watch on YouTube</a>
+  </div>
+  <div style="background:var(--bg3);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.5rem;border:1px solid var(--border)">
+    <div style="font-size:11px;color:var(--text3);font-family:sans-serif;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Sporcle Quiz</div>
+    <div style="font-size:13px;font-family:sans-serif;color:var(--text)">${geoPrac}</div>
+    <a href="https://www.sporcle.com" target="_blank" class="link-pill">🌐 sporcle.com</a>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.geo1?'checked':''}" onclick="toggleCheck(${d},'geo1',this)">✓</div>
+    <span class="cb-label">Watched Crash Course Geography video</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.geo2?'checked':''}" onclick="toggleCheck(${d},'geo2',this)">✓</div>
+    <span class="cb-label">Completed Sporcle quiz</span>
+  </div>
+  <div class="checkbox-row">
+    <div class="cb${s.geo?'checked':''}" onclick="toggleCheck(${d},'geo',this)">✓</div>
+    <span class="cb-label" style="font-weight:500">Mark full Geography block done</span>
+  </div>
+  <div class="notes-label">What you learned today</div>
+  <textarea class="notes-area" rows="3" placeholder="Key fact, surprising discovery, Sporcle score..." onchange="saveNote(${d},'geo_notes',this.value)">${s.geo_notes||''}</textarea>
+</div>
+
+<div class="section-label">Politics — 30 mins</div>
+<div class="habit-card">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--blue-bg);color:var(--blue)">🏛️</div>
+    <div><div class="habit-title">Crash Course U.S. Government ${pol.ep}</div><div class="habit-subtitle">${pol.title}</div></div>
+    <span class="tag tag-politics" style="margin-left:auto">Politics</span>
+  </div>
+  <a href="${pol.url}" target="_blank" class="link-pill">▶ Watch on YouTube</a>
+  <div class="checkbox-row" style="margin-top:0.5rem">
+    <div class="cb${s.politics?'checked':''}" onclick="toggleCheck(${d},'politics',this)">✓</div>
+    <span class="cb-label">Watched today's politics video</span>
+  </div>
+  <div class="notes-label">Key concept or system explained</div>
+  <textarea class="notes-area" rows="3" placeholder="Explain it as if teaching someone else..." onchange="saveNote(${d},'pol_notes',this.value)">${s.pol_notes||''}</textarea>
+  <div class="notes-label">Question this raised</div>
+  <textarea class="notes-area" rows="2" placeholder="What do you want to look into further?" onchange="saveNote(${d},'pol_q',this.value)">${s.pol_q||''}</textarea>
+</div>
+
+<div class="section-label">Workout — 30 mins${isRest?' (Rest Day)':''}</div>
+<div class="habit-card">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--green-bg);color:var(--green)">${isRest?'🧘':'💪'}</div>
+    <div><div class="habit-title">${wkt}</div><div class="habit-subtitle">${isRest?'Full rest. Stretch, walk, recover.':'6 days a week — no excuses. 30 minutes minimum.'}</div></div>
+    <span class="tag tag-workout" style="margin-left:auto">Workout</span>
+  </div>
+  ${!isRest?`<div class="checkbox-row">
+    <div class="cb${s.workout?'checked':''}" onclick="toggleCheck(${d},'workout',this)">✓</div>
+    <span class="cb-label">Completed workout (30+ min)</span>
+  </div>`:`<div class="checkbox-row">
+    <div class="cb${s.workout?'checked':''}" onclick="toggleCheck(${d},'workout',this)">✓</div>
+    <span class="cb-label">Rest day — stretched or walked</span>
+  </div>`}
+  <div class="notes-label">Workout log</div>
+  <textarea class="notes-area" rows="3" placeholder="Exercises, sets, reps, duration, how it felt..." onchange="saveNote(${d},'workout_notes',this.value)">${s.workout_notes||''}</textarea>
+</div>
+
+<div class="section-label">Debate Podcast — 30–60 mins</div>
+<div class="habit-card">
+  <div class="habit-header">
+    <div class="habit-icon" style="background:var(--gold-bg);color:var(--gold)">🎙️</div>
+    <div>
+      <div class="podcast-title">${pod.show}</div>
+      <div class="podcast-host">${pod.host}</div>
+    </div>
+    <span class="tag tag-podcast" style="margin-left:auto">Podcast</span>
+  </div>
+  <div style="font-size:13px;font-family:sans-serif;color:var(--text2);margin-bottom:6px">${pod.ep}</div>
+  <a href="${pod.url}" target="_blank" class="link-pill">🎵 Open on Spotify</a>
+  <div class="checkbox-row" style="margin-top:0.5rem">
+    <div class="cb${s.podcast?'checked':''}" onclick="toggleCheck(${d},'podcast',this)">✓</div>
+    <span class="cb-label">Listened to today's podcast</span>
+  </div>
+  <div class="notes-label">3 key arguments or ideas</div>
+  <textarea class="notes-area" rows="4" placeholder="What were the strongest arguments? Who made the better case? What surprised you?" onchange="saveNote(${d},'pod_notes',this.value)">${s.pod_notes||''}</textarea>
+  <div class="notes-label">One idea to research further</div>
+  <textarea class="notes-area" rows="2" placeholder="A topic, name, or concept that caught your attention..." onchange="saveNote(${d},'pod_research',this.value)">${s.pod_research||''}</textarea>
+</div>
+
+<div class="reflection-card">
+  <div class="reflection-q">"What belief changed today?"</div>
+  <textarea class="notes-area" rows="3" placeholder="Write one sentence. Be honest. This is your growth record." onchange="saveNote(${d},'reflection',this.value)" style="margin-top:0">${s.reflection||''}</textarea>
+  <div class="notes-label">Overall Day Rating</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+    ${[1,2,3,4,5].map(r => `<button onclick="saveNote(${d},'rating',${r});document.querySelectorAll('.rating-btn-${d}').forEach(b=>b.style.background='');this.style.background='var(--gold-bg)'" class="rating-btn-${r} rating-btn-${d}" style="background:${s.rating===r?'var(--gold-bg)':'var(--bg4)'};border:1px solid var(--border);color:var(--gold);font-family:sans-serif;font-size:12px;padding:4px 14px;border-radius:20px;cursor:pointer">${'★'.repeat(r)}</button>`).join('')}
+  </div>
+</div>
+`;
+    cont.appendChild(page);
+  }
+}
+
+buildSidebar();
+buildOverviewGrid();
+buildDays();
+updateProgress();
+</script>
+</body>
+</html>
